@@ -1,0 +1,288 @@
+//AUTHOR: Aaliyah Stephens
+//COURSE: CPT187
+//PURPOSE: Assign item ID's, names, prices, and discount information. 
+//Then generate a prize.
+//CREATEDATE: 12.4.19
+
+package edu.cpt187.stephens.module6;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
+
+public class Inventory 
+{
+	private final String[] DISCOUNT_NAMES = {"Member", "Senior", "None"};
+	private final double[] DISCOUNT_RATES = {0.25,0.15,0.0};
+	private final String[] PRIZE_NAMES = {"Prize 1","Prize 2","Prize 3"};
+	private final int MAX_ITEMS = 5;
+	private final int NOT_FOUND = -1;
+	private final int RESET_VALUE = 0;
+
+	//Class attributes
+	private int[] itemIDs = new int [MAX_ITEMS];
+	private String[] itemNames = new String[MAX_ITEMS];
+	private double[] itemPrices = new double[MAX_ITEMS];
+	private int[] inStockCounts = new int [MAX_ITEMS];
+	private int[] orderQuantity = new int [MAX_ITEMS];
+	private double[] orderTotal = new double [MAX_ITEMS];
+	private int itemSearchIndex = 0;
+	private int recordCount = 0;
+	private Random prizeGenerator = new Random();
+
+
+	//Constructor
+	public Inventory()
+	{
+	}
+
+	//Start of SET reduceStock
+	public void setReduceStock(int borrowedHowMany)
+	{
+		inStockCounts[itemSearchIndex] = 
+				inStockCounts[itemSearchIndex] - borrowedHowMany;
+	}
+	//End of SET reduceStock
+	//Start of SWAP
+	public void swapArrayElements(int borrowedIndex)
+	{
+		int tempIDs = itemIDs[borrowedIndex];
+		String tempNames = itemNames[borrowedIndex];
+		double tempPrices = itemPrices[borrowedIndex];
+		int tempStocks = inStockCounts[borrowedIndex];
+
+		itemIDs[borrowedIndex] = itemIDs[borrowedIndex+1];
+		itemIDs[borrowedIndex +1] = tempIDs;
+		itemNames[borrowedIndex] = itemNames[borrowedIndex+1];
+		itemNames[borrowedIndex +1] = tempNames;
+		itemPrices[borrowedIndex] = itemPrices[borrowedIndex+1];
+		itemPrices[borrowedIndex+1] = tempPrices;
+		inStockCounts[borrowedIndex] = inStockCounts[borrowedIndex+1];
+		inStockCounts[borrowedIndex+1] = tempStocks;
+
+
+	}
+	//End of SWAP
+	//Start of SET bubbleSort
+	public void setBubbleSort()
+	{
+		int last = recordCount - 1;
+
+		while (last > RESET_VALUE)
+		{
+			int index = RESET_VALUE;
+			boolean swap = false;
+
+			while(index < last)
+			{
+				if(itemIDs[index] > itemIDs[index + 1])
+				{
+					swapArrayElements(index);
+					swap = true;
+				}
+				index++;
+			}
+
+			if (swap == false)
+			{
+				last = RESET_VALUE;
+			}
+			else
+			{
+				last = last - 1;
+			}
+		}
+
+		return;
+	}
+	//End of SET bubbleSort
+	//Start of SET loadItems
+	public void setLoadItems(String borrowedFileName)
+	{
+		recordCount = RESET_VALUE;
+
+		try
+		{
+			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
+
+			while(infile.hasNext() == true && recordCount < MAX_ITEMS)
+			{
+				itemIDs[recordCount] = infile.nextInt();
+				itemNames[recordCount] = infile.next();
+				itemPrices[recordCount] = infile.nextDouble();
+				inStockCounts[recordCount] = infile.nextInt();
+
+				recordCount++;
+			}
+			//End of WHILE
+			infile.close();
+
+			setBubbleSort();
+		}
+		//End of TRY
+
+		catch(IOException ex)
+		{
+			recordCount = NOT_FOUND;
+		}
+		//End of CATCH
+	}
+	//End of SET loadItems
+	//Start of SET loadItems borrowedSize
+	public void setLoadItems(String borrowedFileName, int borrowedSize)
+	{
+		recordCount = RESET_VALUE;
+				
+		try
+		{
+			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
+
+			while(infile.hasNext() == true && recordCount < MAX_ITEMS && recordCount < borrowedSize)
+			{
+				itemIDs[recordCount] = infile.nextInt();
+				itemNames[recordCount] = infile.next();
+				itemPrices[recordCount] = infile.nextDouble();
+				orderQuantity[recordCount] = infile.nextInt();
+				orderTotal[recordCount] = infile.nextDouble();
+
+				recordCount++;
+			}
+			//End of WHILE
+			infile.close();
+		}
+		//End of TRY
+
+		catch(IOException ex)
+		{
+			borrowedSize = NOT_FOUND;
+		}
+		//End of CATCH
+	}
+	//End of SET loadItems borrowedSize
+	//Start of SET searchIndex
+	public void setSearchIndex(int borrowedTarget)
+	{
+		itemSearchIndex = getSearchResults(borrowedTarget);
+	}
+	//End of SET searchIndex
+
+	//Start of GET itemIDs
+	public int[] getItemIDs()
+	{
+		return itemIDs;
+	}
+	//End of GET itemIDs
+	//Start of GET inStockCounts
+	public int[] getInStockCounts()
+	{
+		return inStockCounts;
+	}
+	//End of GET inStockCounts
+	//Start of GET itemNames
+	public String[] getItemNames()
+	{
+		return itemNames;
+	}
+	//End of GET itemNames
+	//Start of GET itemPrices
+	public double[] getItemPrices()
+	{
+		return itemPrices;
+	}
+	//End of GET itemPrices
+	//Start of GET discountNames
+	public String[] getDiscountNames()
+	{
+		return DISCOUNT_NAMES;
+	}
+	//End of GET discountNames
+	//Start of GET discountRates
+	public double[] getDiscountRates()
+	{
+		return DISCOUNT_RATES;
+	}
+	//End of GET discountRates
+	//Start of GET orderQuantity
+	public int[] getOrderQuantity()
+	{
+		return orderQuantity;
+	}
+	//End of GET orderQuantity
+	//Start of GET orderTotal
+	public double[] getOrderTotal()
+	{
+		return orderTotal;
+	}
+	//End of GET orderTotal
+	//Start of GET prizeNames
+	public String[] getPrizeNames()
+	{
+		return PRIZE_NAMES;
+	}
+	//End of GET prizeNames
+	//Start of GET randomNumber
+	public int getRandomNumber()
+	{
+		return prizeGenerator.nextInt(PRIZE_NAMES.length);
+	}
+	//End of GET randomNumber
+	//Start of GET searchIndex
+	public int getSearchIndex()
+	{
+		return itemSearchIndex;
+	}
+	//End of GET searchIndex
+	//Start of GET recordCounter
+	public int getRecordCounter()
+	{
+		return recordCount;
+	}
+	//End of GET recordCounter
+	//Start of GET searchResults
+	public int getSearchResults(int borrowedBorrowedTarget)
+	{
+		int first = 0;
+		int mid = 0;
+		int last = recordCount - 1;
+		boolean found = false;
+
+		//Start of WHILE
+		while(first<=last && found==false)
+		{
+			mid = (first + last) / 2;
+			//Start of IF
+			if (itemIDs[mid] == borrowedBorrowedTarget)
+			{
+				found = true;
+			}
+			//End of IF
+			//Start of ELSE
+			else
+			{
+				//Start of IF
+				if (itemIDs[mid]< borrowedBorrowedTarget)
+				{
+					first = mid + 1;
+				}
+				//End of IF
+				//Start of ELSE
+				else
+				{
+					last = mid - 1;
+				}
+				//End of ELSE
+			}
+			//End of ELSE
+		}
+		//End of WHILE
+
+		if (found == false)
+		{
+			mid = NOT_FOUND;
+		}
+
+		return mid;
+	}
+	//End of GET searchResults
+}
+//End of CLASS
