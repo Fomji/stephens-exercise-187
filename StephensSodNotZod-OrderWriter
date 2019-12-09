@@ -1,0 +1,66 @@
+//AUTHOR: Aaliyah Stephens
+//COURSE: CPT187
+//PURPOSE: To keep records of the file, and write to those files.
+//CREATEDATE: 12.4.18
+
+
+package edu.cpt187.stephens.module6;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class OrderWriter 
+{
+	private String masterFileName = "";
+	private int recordCount = 0;
+
+	//Constructor
+	public OrderWriter(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}
+
+	//Start of SET writeOrder
+	public void setWriteOrder(int borrowedItemID, String borrowedItemName, double borrowedItemPrice,
+			int borrowedQuantity, double borrowedOrderCost)
+	{
+		//Start of TRY
+		try
+		{	
+			//Initiate fileWriter
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+
+			filePW.printf("%d\t%s\t%.2f\t%d\t%.2f\r", borrowedItemID, borrowedItemName, 
+					borrowedItemPrice, borrowedQuantity, borrowedOrderCost);
+
+			//Close the file
+			filePW.close();
+			
+			recordCount++;
+		}
+		//End of TRY
+		//Start of CATCH
+		catch(IOException ex)
+		{
+			System.out.printf("\n","Error: " + ex);
+		}
+		//End of CATCH
+	}
+	//End of SET writeOrder
+
+	//Start of GET fileName
+	public String getFileName()
+	{
+		return masterFileName;
+	}
+	//End of GET fileName
+	//Start of GET recordCount
+	public int getRecordCount()
+	{
+		return recordCount;
+	}
+	//End of GET recordCount
+
+}
+//End of CLASS
