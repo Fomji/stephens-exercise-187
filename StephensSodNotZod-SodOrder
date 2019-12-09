@@ -1,0 +1,243 @@
+//AUTHOR: Aaliyah Stephens
+//COURSE: CPT187
+//PURPOSE: Increment counters, and perform calculations.
+//CREATEDATE: 12.4.19
+
+package edu.cpt187.stephens.module6;
+
+public class SodOrder 
+{
+	//Declaring class constants
+	private final double ZERO_TOTAL = 0.0;
+	private final double TAX_RATE = 0.075;
+
+	//Declaring class attributes
+	private int[] itemCounts;
+	private int[] discountCounts;
+	private int[] prizeCounts;
+	private char discountType = ' ';
+	private int itemID = 0;
+	private String itemName = "";
+	private double itemPrice = 0.0;
+	private String discountName = "";
+	private double discountRate = 0.0;
+	private int howMany = 0;
+	private int lastItemSelectedIndex = 0;
+	private String prizeName = "";
+
+	//Constructor
+	public SodOrder()
+	{
+	}
+
+	//Start of SET itemCountArray
+	public void setItemCountArray(int borrowedRecordCount)
+	{
+		if (itemCounts == null || borrowedRecordCount > itemCounts.length)
+		{
+			itemCounts = new int[borrowedRecordCount];
+		}
+	}
+	//Start of SET itemSelection
+	public void setItemSelection(int borrowedSearchIndex)
+	{
+		lastItemSelectedIndex = borrowedSearchIndex;
+	}
+	//End of SET itemSelection
+	//Start of SET itemName
+	public void setItemName(String[] borrowedItemNames)
+	{
+		itemName = borrowedItemNames[lastItemSelectedIndex];
+	}
+	//End of SET itemName
+	//Start of SET itemPrice
+	public void setItemPrice(double[] borrowedItemPrices)
+	{
+		itemPrice = borrowedItemPrices[lastItemSelectedIndex];
+	}
+	//Start of SET howMany
+	public void setHowMany(int borrowedHowMany)
+	{
+		howMany = borrowedHowMany;
+	}
+	//End of SET howMany
+	//Start of SET discountType
+	public void setDiscountType(char borrowedMenuSelection)
+	{
+		discountType = borrowedMenuSelection;
+	}
+	//End of SET discountType
+	//Start of SET discountName
+	public void setDiscountName(String[] borrowedDiscountNames)
+	{
+		if(discountCounts == null)
+		{
+			discountCounts = new int[borrowedDiscountNames.length];
+		}
+
+
+		if (discountType == 'A')
+		{
+			discountName = borrowedDiscountNames[0];
+			discountCounts[0]++;
+		}
+		else if (discountType == 'B')
+		{
+			discountName = borrowedDiscountNames[1];
+			discountCounts[1]++;
+		}
+		else
+		{
+			discountName = borrowedDiscountNames[2];
+			discountCounts[2]++;
+		}
+	}
+	//End of SET discountName
+	//Start of SET discountRate
+	public void setDiscountRate(double[] borrowedDiscountRates)
+	{
+		if (discountType == 'A')
+		{
+			discountRate = borrowedDiscountRates[0];
+		}
+		else if (discountType == 'B')
+		{
+			discountRate = borrowedDiscountRates[1];
+		}
+		else
+		{
+			discountRate = borrowedDiscountRates[2];
+		}
+	}
+	//End of SET discountRate
+	//Start of SET prizeName
+	public void setPrizeName(String[] borrowedPrizeNames, int borrowedPrizeIndex)
+	{
+		if(prizeCounts == null)
+		{
+			prizeCounts = new int[borrowedPrizeNames.length];        
+		}
+
+		prizeName = borrowedPrizeNames[borrowedPrizeIndex];
+
+		prizeCounts[borrowedPrizeIndex]++;
+	}
+	//End of SET prizeName
+	//Start of SET decreaseInStock
+	public void setDecreaseInStock(Inventory borrowedInventoryObject)
+	{
+		borrowedInventoryObject.setReduceStock(howMany);
+	}
+	//End of SET decreaseInStock
+
+	//Start of GET itemID
+	public int getItemID()
+	{
+		return itemID;
+	}
+	//End of GET itemID
+	//Start of GET inStockCount
+	public int getInStockCount(int[] borrowedInStockCounts)
+	{
+		return borrowedInStockCounts[lastItemSelectedIndex];
+	}
+	//End of GET inStockCount
+	//Start of GET itemName
+	public String getItemName()
+	{
+		return itemName;
+	}
+	//End of GET itemName
+	//Start of GET itemPrice
+	public double getItemPrice()
+	{
+		return itemPrice;
+	}
+	//End of GET itemPrice
+	//Start of GET howMany
+	public int getHowMany()
+	{
+		return howMany;
+	}
+	//End of GET howMany
+	//Start of GET discountName
+	public String getDiscountName()
+	{
+		return discountName;
+	}
+	//End of GET discountName
+	//Start of GET discountRate
+	public double getDiscountRate()
+	{
+		return discountRate;
+	}
+	//End of GET discountRate
+	//Start of GET discountAmt
+	public double getDiscountAmt()
+	{
+		return itemPrice * discountRate;
+	}
+	//End of GET discountAmt
+	//Start of GET discountPrice
+	public double getDiscountPrice()
+	{
+		return itemPrice - getDiscountAmt();
+	}
+	//End of GET discountPrice
+	//Start of GET subTotal
+	public double getSubTotal()
+	{
+		return getDiscountPrice() * howMany;
+	}
+	//End of GET subTotal
+	//Start of GET taxRate
+	public double getTaxRate()
+	{
+		return TAX_RATE;
+	}
+	//End of GET taxRate
+	//Start of GET taxAmt
+	public double getTaxAmt()
+	{
+		return getSubTotal() * TAX_RATE;
+	}
+	//End of GET taxAmt
+	//Start of GET totalCost
+	public double getTotalCost()
+	{
+		if (discountType == ' ')
+		{
+			return ZERO_TOTAL;
+		}
+		else
+		{
+			return getSubTotal() + getTaxAmt();
+		}
+	}
+	//End of GET totalCost
+	//Start of GET itemCounts
+	public int[] getItemCounts()
+	{
+		return itemCounts;
+	}
+	//End of GET itemCounts
+	//Start of GET discountCounts
+	public int[] getDiscountCounts()
+	{
+		return discountCounts;
+	}
+	//End of GET discountCounts
+	//Start of GET prizeCounts
+	public int[] getPrizeCounts()
+	{
+		return prizeCounts;
+	}
+	//End of GET prizeCounts
+	//Start of GET prizeName
+	public String getPrizeName()
+	{
+		return prizeName;
+	}
+	//End of GET prizeName
+
+}
